@@ -68,7 +68,6 @@ class Farmer(tillage_capital.Farmer):
             "farmers capital",
             "farmers capital based on income and costs",
             datatype=float,
-            unit="euro",
         )
     )
 
