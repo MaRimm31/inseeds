@@ -144,12 +144,12 @@ class Farmer(farming.Farmer):
 
         if self.tpb > 0.5:
             # decrease pbc after strategy switch
-            self._pbc =  max(self._pbc - 0.25, 0.5)
+            self.pbc =  max(self.pbc - 0.25, 0.5)
 
         # increase pbc if tpb is near 0.5 to learn from own experience
         elif self.tpb <= 0.5 and self.tpb > 0.4:
-            self._pbc =  min(
-                self._pbc + 0.25 / self.strategy_switch_duration, 1
+            self.pbc =  min(
+                self.pbc + 0.25 / self.strategy_switch_duration, 1
             )
 
 
