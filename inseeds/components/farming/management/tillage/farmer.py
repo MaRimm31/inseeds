@@ -92,7 +92,7 @@ class Farmer(farming.Farmer):
         if self.tillage == 1:
             return sigmoid(0.5 - social_norm)
         else:
-            return sigmoid(social_norm - 0.5)   
+            return sigmoid(social_norm - 0.5)
 
     def split_neighbourhood(self, attribute):
         """split the neighbourhood of farmers after a defined boolean attribute
@@ -139,19 +139,6 @@ class Farmer(farming.Farmer):
             second_var = np.nan
 
         return first_var, second_var
-    
-    def update_pbc(self):
-
-        if self.tpb > 0.5:
-            # decrease pbc after strategy switch
-            self.pbc =  max(self.pbc - 0.25, 0.5)
-
-        # increase pbc if tpb is near 0.5 to learn from own experience
-        elif self.tpb <= 0.5 and self.tpb > 0.4:
-            self.pbc =  min(
-                self.pbc + 0.25 / self.strategy_switch_duration, 1
-            )
-
 
     def update(self, t):
         # call the base class update method
@@ -167,11 +154,12 @@ class Farmer(farming.Farmer):
                 + self.weight_norm * self.social_norm
             ) * self.pbc
 
-            self.update_pbc()
-
             if self.tpb > 0.5:
                 # switch strategy
                 self.tillage = int(not self.tillage)
+
+                # decrease pbc after strategy switch
+                self.pbc = max(self.pbc - 0.25, 0.5)
 
                 # set back counter for strategy switch
                 self.strategy_switch_time = np.random.normal(
@@ -188,6 +176,12 @@ class Farmer(farming.Farmer):
                 # set the values of the farmers attributes to the LPJmL
                 #   variables
                 self.set_lpjml(attribute="tillage")
+
+            # increase pbc if tpb is near 0.5 to learn from own experience
+            elif self.tpb <= 0.5 and self.tpb > 0.4:
+                self.pbc = min(
+                    self.pbc + 0.25 / self.strategy_switch_duration, 1
+                )
 
         else:
             # decrease the counter for strategy switch time each year
