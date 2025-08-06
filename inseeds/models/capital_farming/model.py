@@ -65,9 +65,10 @@ class Farmer(tillage_capital.Farmer):
         ),
         # TODO: implement euro/dollar in copan:CORE 
         capital=Variable(
-            "xxxs",
-            "dsfdsdfsdfsdfsdfs",
-            # unit="euro",
+            "farmers capital",
+            "farmers capital based on income and costs",
+            datatype=float,
+            unit="euro",
         )
     )
 
